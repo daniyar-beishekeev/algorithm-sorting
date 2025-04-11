@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -Wall
-TARGET = gen
-SRC = gen.cpp
+TARGET = main
+SRC = main.cpp
 EXTRAS = -lm
 
 all:
