@@ -12,11 +12,12 @@ public:
 
 		//Allocate extra space once and reuse for each merge call
 		//!Process is not parallel, so it is sufficient for allocate memory once
-		T* extraSpace = new T[r - l + 1];
+		T* extraSpace = new T[r - l];
 		
 		sort_runner(l, r, cmp, extraSpace);
 
 		delete[] extraSpace;
+		return;
 	}
 
 private:
@@ -31,6 +32,7 @@ private:
 
 			merge(l, r, mid, le, extraSpace);
 		}
+		return;
 	}
 
 	template<typename T>
@@ -66,5 +68,6 @@ private:
 			p2--;
 			std::swap(*pivot, *p2);
 		}
+		return;
 	}
 };

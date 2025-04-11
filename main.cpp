@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 
-#include "traditional/merge-sort.cpp"
+//#include "traditional/merge-sort.cpp"
+#include "traditional/heap-sort.cpp"
+
+#define SORTER heapSort
 
 using namespace std;
 
@@ -34,7 +37,7 @@ int main() {
 	}
 	cout << '\n';
 
-	mergeSort::sort(arr, arr + n, cmp);
+	SORTER::sort(arr, arr + n, cmp);
 	cout << NUM_COMPARISONS << '\n' << '\n';
 
 	if(!is_sorted(arr, arr + n)){
