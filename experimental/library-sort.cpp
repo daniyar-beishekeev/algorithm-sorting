@@ -52,12 +52,10 @@ private:
 			else
 				l = mid + 1;
 		}
-		if(l != r){
-			while(l < r){
-				if(S[l].first && le(elem, S[l].second))
-					break;
-				l++;
-			}
+		while(l < r){
+			if(S[l].first && le(elem, S[l].second))
+				break;
+			l++;
 		}
 //		assert(l == linearSearch(elem, S, k, le));
 		return l;
