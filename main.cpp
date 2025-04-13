@@ -66,6 +66,10 @@ int main() {
 	cout << "Comparisons: " << NUM_COMPARISONS << '\n';
 	cout << "Swaps      : " << NUM_SWAPS << '\n';
 
+	for(int i = 0; i < n; i++){
+		assert(arr[i] == i + 1);
+	}
+
 	if(!is_sorted(arr, arr + n)){
 		for (int i = 0; i < n; i++) {
 			cout << arr[i] << " ";

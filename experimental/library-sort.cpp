@@ -61,8 +61,8 @@ private:
 	}
 
 	template<typename T>
-	static inline void insert(GAP_STRUCT(T) *S, size_t &idx, T &elem, size_t k, void(&swp)(T&, T&)){
-		for(size_t l = idx - 1, r = idx;; l--, r++){
+	static inline void insert(GAP_STRUCT(T) *S, size_t &idx, T &elem, ssize_t k, void(&swp)(T&, T&)){
+		for(ssize_t l = idx - 1, r = idx;; l--, r++){
 			if(r <= k && !S[r].first)
 				return insertRight(S, idx, elem, swp);
 			if(l > 0 && !S[l].first)
@@ -99,6 +99,15 @@ private:
 				insert(S, idx, toInsert, 1 << i, swp);
 			}
 		}
+
+		T *pivot = l;
+		for(size_t i = 1; i <= n * 2; i++)
+			if(S[i].first){
+				assert(pivot < r);
+				swp(*pivot, S[i].second);
+				pivot++;
+			}
+		assert(pivot == r);
 
 		delete[] S;
 	}
