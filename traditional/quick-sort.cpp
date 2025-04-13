@@ -37,6 +37,7 @@ private:
 		return;
 	}
 
+protected:
 	template<typename T>
 	static inline T* partition(T *&l, T *&r, bool (&le)(T&, T&), void(&swp)(T&, T&)){
 		T *i = l;

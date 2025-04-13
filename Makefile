@@ -8,7 +8,7 @@ all:
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRC) $(EXTRAS)
 
 debug:
-	$(CC) -g $(CFLAGS) -o $(TARGET) $(SRC) $(EXTRAS)
+	$(CC) -g -O0 $(CFLAGS) -o $(TARGET) $(SRC) $(EXTRAS)
 
 clean:
 	rm -f $(TARGET)

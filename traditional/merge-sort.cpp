@@ -35,6 +35,7 @@ private:
 		return;
 	}
 
+protected:
 	template<typename T>
 	static inline void merge(T *&l, T *&r, T *&mid, bool (&le)(T&, T&), T* &extraSpace, void(&swp)(T&, T&)){
 		//MERGE PROCEDURE

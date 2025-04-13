@@ -39,6 +39,7 @@ private:
 		return;
 	}
 
+protected:
 	template<typename T>
 	static inline std::pair<T*, T*> partition(T *&l, T *&r, bool (&le)(T&, T&), void(&swp)(T&, T&)){
 		if(le(*(r - 1), *(l)))swp(*l, *(r - 1));

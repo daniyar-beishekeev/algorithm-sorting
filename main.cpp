@@ -6,9 +6,16 @@
 //#include "traditional/insertion-sort.cpp"
 //#include "traditional/selection-sort.cpp"
 //#include "traditional/quick-sort.cpp"
-#include "traditional/dual-quick-sort.cpp"
+//#include "traditional/dual-quick-sort.cpp"
 
-#define SORTER dualQuickSort
+#include "experimental/library-sort.cpp"
+//#include "experimental/tim-sort.cpp"
+//#include "experimental/cocktail-shaker-sort.cpp"
+//#include "experimental/comb-sort.cpp"
+//#include "experimental/tournament-sort.cpp"
+//#include "experimental/intro-sort.cpp"
+
+#define SORTER librarySort
 
 using namespace std;
 
@@ -31,14 +38,20 @@ void custom_swap(int &a, int &b){
 	swap(a, b);
 }
 
+inline uint64_t getCpuCycles() {
+	struct timespec ts;
+    clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
+    return static_cast<uint64_t>(ts.tv_sec) * 1000000000ull + ts.tv_nsec;
+}
+
 int main() {
+	auto start = getCpuCycles();
+
 	assert(RAND_MAX == 0x7fffffff);
 	srand(time(0));
 
 	int n = gen(5, 20);
-	n = 2;
-
-	cout << n << endl;
+	
 	vector<int>vec(n);
 	int *arr = (int*)vec.data();
 	iota(arr, arr + n, 1);
@@ -54,13 +67,13 @@ int main() {
 	cout << "Swaps      : " << NUM_SWAPS << '\n';
 
 	if(!is_sorted(arr, arr + n)){
-		cout << "Fail, not sorted array\n";
 		for (int i = 0; i < n; i++) {
 			cout << arr[i] << " ";
 		}
 		cout << '\n';
+		cout << "Fail, not sorted array\n";
 		return 1;
 	}
-
+	cout << 1e-6 * (getCpuCycles() - start) << '\n';
 	return 0;
 }
