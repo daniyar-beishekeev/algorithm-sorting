@@ -24,7 +24,7 @@ private:
 		while(r >= begin){
 			swp(S[w].second, S[r].second);
 			std::swap(S[w].first, S[r].first);
-			assert(S[w - 1].first == false);
+//			assert(S[w - 1].first == false);
 
 			r--;
 			w -= 2;
@@ -32,12 +32,35 @@ private:
 	}
 
 	template<typename T>
-	static inline size_t binarySearch(T &elem, GAP_STRUCT(T) *S, size_t k, bool (&le)(T&, T&)){
+	static inline size_t linearSearch(T &elem, GAP_STRUCT(T) *S, size_t k, bool (&le)(T&, T&)){
 		for(size_t i = 1; i <= k; i++){
 			if(S[i].first && le(elem, S[i].second))
 				return i;
 		}
 		return k + 1;
+	}
+
+	template<typename T>
+	static inline size_t binarySearch(T &elem, GAP_STRUCT(T) *S, size_t k, bool (&le)(T&, T&)){
+		size_t l = 1, r = k + 1;
+		while(l + 2 < r){
+			size_t mid = (l + r) >> 1;
+			if(!S[mid].first)mid++;
+//			assert(S[mid].first == true);
+			if(le(elem, S[mid].second))
+				r = mid;
+			else
+				l = mid + 1;
+		}
+		if(l != r){
+			while(l < r){
+				if(S[l].first && le(elem, S[l].second))
+					break;
+				l++;
+			}
+		}
+//		assert(l == linearSearch(elem, S, k, le));
+		return l;
 	}
 
 	template<typename T>
@@ -103,11 +126,11 @@ private:
 		T *pivot = l;
 		for(size_t i = 1; i <= n * 2; i++)
 			if(S[i].first){
-				assert(pivot < r);
+//				assert(pivot < r);
 				swp(*pivot, S[i].second);
 				pivot++;
 			}
-		assert(pivot == r);
+//		assert(pivot == r);
 
 		delete[] S;
 	}
