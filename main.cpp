@@ -1,9 +1,6 @@
 //Set sorting timeout to 5 seconds
 const long long int TIMEOUT = 5;
 
-//Turn on randomizer for quicksort
-#define RANDOMIZER 1
-
 #include <bits/stdc++.h>
 #include <sys/wait.h>
 
@@ -79,12 +76,14 @@ void testSorting(vi &toSort, vi &answer, void (*sortPtr)(int*, int*, bool (&)(in
 	}else{//Parent
 		int status;
 		pid_t result = waitpid(pid, &status, WNOHANG);
-		for (int i = 0; i < TIMEOUT && result == 0; i++){
-			sleep(1);
+		for (int i = 0; i < TIMEOUT * 1000 && result == 0; i++){
+			usleep(1000);
 			result = waitpid(pid, &status, WNOHANG);
 		}
 
-		if (result == 0) {
+		if (result == 0){
+			kill(pid, SIGKILL);
+			waitpid(pid, &status, 0);
 			cout << "Comment     : " << comment << '\n';
 			cout << "Result      : " << "Timeout" << '\n';
 			cout << "Algorithm   : " << algoName << '\n';
@@ -93,8 +92,6 @@ void testSorting(vi &toSort, vi &answer, void (*sortPtr)(int*, int*, bool (&)(in
 			cout << "Swaps count : " << 0 << '\n';
 			cout << "Comparions  : " << 0 << '\n';
 			cout << '\n';
-			kill(pid, SIGKILL);
-			waitpid(pid, &status, 0);
 		}
 	}
 }
@@ -132,8 +129,8 @@ int main(int argc, char* argv[]){
 		}else{
 			throw invalid_argument("Can't open file: " + (string)argv[4]);
 		}
-	}else if(argc == 4 && (string)argv[1] == "test"){
-//		./main test inputPath comment
+	}else if(argc >= 3 && (string)argv[1] == "test"){
+//		./main test inputPath
 
 		FILE* file = fopen(argv[2], "r");
 		if(file != NULL){
@@ -149,13 +146,25 @@ int main(int argc, char* argv[]){
 			auto ans = vec;
 			sort(ans.begin(), ans.end());
 
-			string comment = argv[3];
+			string comment = "Comment";
+			if(argc >= 4)
+				comment = argv[3];
 
 			int sorts = sizeof(SORTERS) / sizeof(SORTERS[0]);
+
+			string limiter = "";
+			if(argc < 5){
+				for(int i = 0; i < sorts; i++)
+					limiter += SORTERS[i].first;
+			}else{
+				limiter = argv[4];
+			}
+
 			for(int i = 0; i < sorts; i++){
 				//Not necessary, CHeck required to remove
 				vi vec2 = vec;
-				testSorting(vec2, ans, SORTERS[i].second, SORTERS[i].first, comment);
+				if(limiter.find(SORTERS[i].first) != string::npos)
+					testSorting(vec2, ans, SORTERS[i].second, SORTERS[i].first, comment);
 			}
 
 		}else{

@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall
+CFLAGS = -Wall -DRANDOMIZER
 TARGET = main
 SRC = main.cpp
 EXTRAS = -lm

@@ -31,18 +31,23 @@ private:
 	}
 
 	template<typename T>
-	static void heapDown(T *&l, size_t pos, size_t n, bool (&le)(T&, T&), void(&swp)(T&, T&)){
-		size_t mx = pos;
-		size_t lson = (pos << 1) + 1;
-		size_t rson = (pos << 1) + 2;
-		if(lson < n && le(*(l + mx), *(l + lson)))
-			mx = lson;
-		if(rson < n && le(*(l + mx), *(l + rson)))
-			mx = rson;
+	static inline void heapDown(T *&l, size_t pos, size_t n, bool (&le)(T&, T&), void(&swp)(T&, T&)){
+		size_t mx, lson, rson;
+		do{
+			mx = pos;
+			lson = (pos << 1) + 1;
+			rson = (pos << 1) + 2;
+			if(lson < n && le(*(l + mx), *(l + lson)))
+				mx = lson;
+			if(rson < n && le(*(l + mx), *(l + rson)))
+				mx = rson;
 
-		if(mx != pos){
-			swp(*(l + mx), *(l + pos));
-			heapDown(l, mx, n, le, swp);
-		}
+			if(mx != pos){
+				swp(*(l + mx), *(l + pos));
+				pos = mx;
+			}else{
+				break;
+			}
+		}while(true);
 	}
 };
