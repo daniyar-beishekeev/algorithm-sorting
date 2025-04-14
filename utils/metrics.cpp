@@ -18,6 +18,27 @@ uint64_t NUM_COMPARISONS = 0;
 uint64_t NUM_SWAPS = 0;
 uint64_t PEAK_MEMORY = 0;
 
+struct BigMemoryInt{
+	int value;
+
+	//Single byte data type
+	//1 MB
+	static constexpr size_t _SIZE = 1024 * 1024;
+	char _TRASH[_SIZE];
+};
+
+bool cmp(BigMemoryInt &a, BigMemoryInt &b){
+	NUM_COMPARISONS++;
+	return a.value < b.value;
+}
+
+void custom_swap(BigMemoryInt &a, BigMemoryInt &b){
+	NUM_SWAPS++;
+	//Boost swapping, necessary only
+	std::swap(a.value, b.value);
+}
+
+
 bool cmp(int &a, int &b){
 	NUM_COMPARISONS++;
 	return a < b;

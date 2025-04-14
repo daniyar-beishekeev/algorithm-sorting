@@ -1,5 +1,6 @@
 //Set sorting timeout to 5 seconds
 const long long int TIMEOUT = 5;
+#include <bits/stdc++.h>
 
 #include "traditional/merge-sort.cpp"
 #include "traditional/heap-sort.cpp"
@@ -18,8 +19,6 @@ const long long int TIMEOUT = 5;
 
 #include "utils/metrics.cpp"
 #include "utils/gen.cpp"
-
-#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -75,35 +74,39 @@ int main(int argc, char* argv[]){
 		else if(algo == "combSort")sortPtr = combSort::sort;
 		else if(algo == "tournamentSort")sortPtr = tournamentSort::sort;
 		else if(algo == "introSort")sortPtr = introSort::sort;
+		else throw invalid_argument("Couldn't parse sorting algorithm: " + algo);
 
 		FILE* file = fopen(argv[2], "r");
 		if(file != NULL){
-			int n = fscanf(file, "%d", &n);
+			int n;
+			fscanf(file, "%d", &n);
+
 			vector<int> vec(n);
 
 			for(int i = 0; i < n; i++)
 				fscanf(file, "%d", &vec[i]);
 			int *arr = vec.data();
+			fclose(file);
 
 			//Keep original to track changed values. Dev only!
 			vector<int> original = vec;
 
 			//Start test
 			//Start memory tracker
-			pthread_t thread;
-			assert(pthread_create(&thread, nullptr, memoryTracker, nullptr) == 0 && "Couldn't create memory tracker");
-			usleep(1000);
+			//pthread_t thread;
+			//assert(pthread_create(&thread, nullptr, memoryTracker, nullptr) == 0 && "Couldn't create memory tracker");
+			//usleep(1000);
 
-			auto initialMemory = PEAK_MEMORY;
+			auto initialMemory = getPeakRSS();
 			auto initialTime = getCpuCycles();
 			sortPtr(arr, arr + n, cmp, custom_swap);
-			initialMemory = PEAK_MEMORY - initialMemory;
+			initialMemory = getPeakRSS() - initialMemory;
 			initialTime = (getCpuCycles() - initialTime);
 
 			//Stop memory tracker
-			usleep(1000);
-			pthread_cancel(thread);
-			pthread_join(thread, nullptr);
+			//usleep(1000);
+			//pthread_cancel(thread);
+			//pthread_join(thread, nullptr);
 
 			//Freeze metrics
 
@@ -112,8 +115,13 @@ int main(int argc, char* argv[]){
 			sort(original.begin(), original.end());
 			assert(original == vec && "Sorting algorithm modified array elements");
 
+			int a = 2;
+			int b = 3;
+			custom_swap(a, b);
 			cout << "Memory usage: " << initialMemory << '\n';
 			cout << "CPU consume : " << initialTime << '\n';
+			cout << "Swaps count : " << NUM_SWAPS << '\n';
+			cout << "Comparions  : " << NUM_COMPARISONS << '\n';
 			cout << "Success test\n";
 		}else{
 			throw invalid_argument("Can't open file: " + (string)argv[4]);
