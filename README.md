@@ -107,107 +107,107 @@ To convert report.txt file to report.csv (Good for analysis)
 ```
 
 ```
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : mergeSort
-Memory usage: 0
-CPU consume : 0.2702
-Swaps count : 19952
-Comparions  : 8699
+Memory usage: 4288512
+CPU consume : 328.885
+Swaps count : 39902848
+Comparions  : 9884992
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : heapSort
-Memory usage: 0
-CPU consume : 0.2067
-Swaps count : 9075
-Comparions  : 16844
+Memory usage: 176128
+CPU consume : 317.317
+Swaps count : 19787792
+Comparions  : 37692069
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : bubbleSort
 Memory usage: 0
-CPU consume : 4.4018
-Swaps count : 250291
-Comparions  : 954045
+CPU consume : 4.1476
+Swaps count : 0
+Comparions  : 999999
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : insertionSort
 Memory usage: 0
-CPU consume : 2.7142
-Swaps count : 250291
-Comparions  : 251286
+CPU consume : 6.8448
+Swaps count : 0
+Comparions  : 999999
 
-Comment     : CustomComment
-Result      : Success
+Comment     : Comment
+Result      : Timeout
 Algorithm   : selectionSort
 Memory usage: 0
-CPU consume : 1.2856
-Swaps count : 995
-Comparions  : 499500
+CPU consume : 0
+Swaps count : 0
+Comparions  : 0
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : quickSort
-Memory usage: 0
-CPU consume : 0.1451
-Swaps count : 2842
-Comparions  : 11895
+Memory usage: 339968
+CPU consume : 97.628
+Swaps count : 1166798
+Comparions  : 25843723
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : dualQuickSort
-Memory usage: 0
-CPU consume : 0.2111
-Swaps count : 6490
-Comparions  : 11033
+Memory usage: 344064
+CPU consume : 165.001
+Swaps count : 10656534
+Comparions  : 24169075
 
-Comment     : CustomComment
-Result      : Success
+Comment     : Comment
+Result      : Timeout
 Algorithm   : librarySort
 Memory usage: 0
-CPU consume : 0.3416
-Swaps count : 13506
-Comparions  : 8580
+CPU consume : 0
+Swaps count : 0
+Comparions  : 0
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : timSort
-Memory usage: 0
-CPU consume : 0.2582
-Swaps count : 17511
-Comparions  : 13324
+Memory usage: 4284416
+CPU consume : 241.643
+Swaps count : 30000000
+Comparions  : 8457856
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : cocktailShakerSort
 Memory usage: 0
-CPU consume : 4.2189
-Swaps count : 250291
-Comparions  : 520479
+CPU consume : 3.0246
+Swaps count : 0
+Comparions  : 999999
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : combSort
 Memory usage: 0
-CPU consume : 0.1809
-Swaps count : 4309
-Comparions  : 21704
+CPU consume : 108.018
+Swaps count : 0
+Comparions  : 45666766
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : tournamentSort
-Memory usage: 0
-CPU consume : 0.4572
-Swaps count : 2000
-Comparions  : 8672
+Memory usage: 68345856
+CPU consume : 353.601
+Swaps count : 2000000
+Comparions  : 10066432
 
-Comment     : CustomComment
+Comment     : Comment
 Result      : Success
 Algorithm   : introSort
-Memory usage: 0
-CPU consume : 0.1221
-Swaps count : 3593
-Comparions  : 12263
+Memory usage: 356352
+CPU consume : 381.146
+Swaps count : 19788834
+Comparions  : 75690210
 ```
