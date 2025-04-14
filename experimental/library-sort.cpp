@@ -1,4 +1,6 @@
 #include <cstdlib>
+#include <utility>
+#include <cmath>
 
 class librarySort{
 public:

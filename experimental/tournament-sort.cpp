@@ -97,7 +97,7 @@ public:
 		build(root, l ,r - 1);
 	}
 	T* popRoot(){
-		assert(root != nullptr);
+//		assert(root != nullptr);
 		T* ans = root->value;
 
 		//Road to ans

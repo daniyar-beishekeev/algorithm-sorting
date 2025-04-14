@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <cmath>
 
 class combSort{
 public:

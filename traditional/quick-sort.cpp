@@ -4,6 +4,7 @@
 
 //#define RANDOMIZER 1
 
+#pragma once
 class quickSort{
 public:
 	//Merge sort, instead of copying values, swaps each 

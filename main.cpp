@@ -1,83 +1,124 @@
-#include <bits/stdc++.h>
+//Set sorting timeout to 5 seconds
+const long long int TIMEOUT = 5;
 
-//#include "traditional/merge-sort.cpp"
-//#include "traditional/heap-sort.cpp"
-//#include "traditional/bubble-sort.cpp"
-//#include "traditional/insertion-sort.cpp"
-//#include "traditional/selection-sort.cpp"
-//#include "traditional/quick-sort.cpp"
-//#include "traditional/dual-quick-sort.cpp"
+#include "traditional/merge-sort.cpp"
+#include "traditional/heap-sort.cpp"
+#include "traditional/bubble-sort.cpp"
+#include "traditional/insertion-sort.cpp"
+#include "traditional/selection-sort.cpp"
+#include "traditional/quick-sort.cpp"
+#include "traditional/dual-quick-sort.cpp"
 
 #include "experimental/library-sort.cpp"
-//#include "experimental/tim-sort.cpp"
-//#include "experimental/cocktail-shaker-sort.cpp"
-//#include "experimental/comb-sort.cpp"
-//#include "experimental/tournament-sort.cpp"
-//#include "experimental/intro-sort.cpp"
+#include "experimental/tim-sort.cpp"
+#include "experimental/cocktail-shaker-sort.cpp"
+#include "experimental/comb-sort.cpp"
+#include "experimental/tournament-sort.cpp"
+#include "experimental/intro-sort.cpp"
 
-#define SORTER librarySort
+#include "utils/metrics.cpp"
+#include "utils/gen.cpp"
+
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int gen(int l, int r) {
-	return rand() % (r - l + 1) + l;
-}
+int main(int argc, char* argv[]){
+	if(argc == 5 && (string)argv[1] == "gen"){
+//		./main gen N testType outputPath
+		int n = stoi(argv[2]);
+		assert(n >= 0 && "Too small array size");
+		assert(n <= (int)1e8 && "Warning! Too large array size, 100M");
 
-//Counters to track how many operations used
+		vector<int> (*generatorFunction)(int);
+		string func = argv[3];
 
-int NUM_COMPARISONS = 0;
-int NUM_SWAPS = 0;
+		if(func == "genPermutation")generatorFunction = genPermutation;
+		else if(func == "genPermutationSorted")generatorFunction = genPermutationSorted;
+		else if(func == "genPermutationReversed")generatorFunction = genPermutationReversed;
+		else if(func == "genIdentical")generatorFunction = genIdentical;
+		else if(func == "genBalanced")generatorFunction = genBalanced;
+		else if(func == "genAbsolute")generatorFunction = genAbsolute;
+		else if(func == "genAbsoluteSmall")generatorFunction = genAbsoluteSmall;
+		else throw invalid_argument("Couldn't parse generating algorithm: " + func);
 
-bool cmp(int &a, int &b){
-	NUM_COMPARISONS++;
-	return a < b;
-}
-
-void custom_swap(int &a, int &b){
-	NUM_SWAPS++;
-	swap(a, b);
-}
-
-inline uint64_t getCpuCycles() {
-	struct timespec ts;
-    clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
-    return static_cast<uint64_t>(ts.tv_sec) * 1000000000ull + ts.tv_nsec;
-}
-
-int main() {
-	auto start = getCpuCycles();
-
-	assert(RAND_MAX == 0x7fffffff);
-	srand(time(0));
-
-	int n = gen(5, 20);
-	
-	vector<int>vec(n);
-	int *arr = (int*)vec.data();
-	iota(arr, arr + n, 1);
-	random_shuffle(arr, arr + n);
-
-	for (int i = 0; i < n; i++) {
-		cout << arr[i] << " ";
-	}
-	cout << '\n';
-
-	SORTER::sort(arr, arr + n, cmp, custom_swap);
-	cout << "Comparisons: " << NUM_COMPARISONS << '\n';
-	cout << "Swaps      : " << NUM_SWAPS << '\n';
-
-	for(int i = 0; i < n; i++){
-		assert(arr[i] == i + 1);
-	}
-
-	if(!is_sorted(arr, arr + n)){
-		for (int i = 0; i < n; i++) {
-			cout << arr[i] << " ";
+		FILE* file = fopen(argv[4], "w");
+		if(file != NULL){
+			vector<int> vec = generatorFunction(n);
+			fprintf(file, "%d\n", n);
+			for(int i = 0; i < n; i++){
+				if(i > 0)
+					fprintf(file, " ");
+				fprintf(file, "%d", vec[i]);
+			}
+			fprintf(file, "\n");
+			fclose(file);
+		}else{
+			throw invalid_argument("Can't open file: " + (string)argv[4]);
 		}
-		cout << '\n';
-		cout << "Fail, not sorted array\n";
-		return 1;
+	}else if(argc == 4 && (string)argv[1] == "test"){
+//		./main test inputPath algorthim
+
+		string algo = argv[3];
+		void (*sortPtr)(int*, int*, bool (&)(int&, int&), void (&)(int&, int&));
+
+		if(algo == "mergeSort")sortPtr = mergeSort::sort;
+		else if(algo == "heapSort")sortPtr = heapSort::sort;
+		else if(algo == "bubbleSort")sortPtr = bubbleSort::sort;
+		else if(algo == "insertionSort")sortPtr = insertionSort::sort;
+		else if(algo == "selectionSort")sortPtr = selectionSort::sort;
+		else if(algo == "quickSort")sortPtr = quickSort::sort;
+		else if(algo == "dualQuickSort")sortPtr = dualQuickSort::sort;
+		else if(algo == "librarySort")sortPtr = librarySort::sort;
+		else if(algo == "timSort")sortPtr = timSort::sort;
+		else if(algo == "cocktailShakerSort")sortPtr = cocktailShakerSort::sort;
+		else if(algo == "combSort")sortPtr = combSort::sort;
+		else if(algo == "tournamentSort")sortPtr = tournamentSort::sort;
+		else if(algo == "introSort")sortPtr = introSort::sort;
+
+		FILE* file = fopen(argv[2], "r");
+		if(file != NULL){
+			int n = fscanf(file, "%d", &n);
+			vector<int> vec(n);
+
+			for(int i = 0; i < n; i++)
+				fscanf(file, "%d", &vec[i]);
+			int *arr = vec.data();
+
+			//Keep original to track changed values. Dev only!
+			vector<int> original = vec;
+
+			//Start test
+			//Start memory tracker
+			pthread_t thread;
+			assert(pthread_create(&thread, nullptr, memoryTracker, nullptr) == 0 && "Couldn't create memory tracker");
+			usleep(1000);
+
+			auto initialMemory = PEAK_MEMORY;
+			auto initialTime = getCpuCycles();
+			sortPtr(arr, arr + n, cmp, custom_swap);
+			initialMemory = PEAK_MEMORY - initialMemory;
+			initialTime = (getCpuCycles() - initialTime);
+
+			//Stop memory tracker
+			usleep(1000);
+			pthread_cancel(thread);
+			pthread_join(thread, nullptr);
+
+			//Freeze metrics
+
+			assert(is_sorted(vec.begin(), vec.end()) && "Sorting algorithm is not sorted");
+
+			sort(original.begin(), original.end());
+			assert(original == vec && "Sorting algorithm modified array elements");
+
+			cout << "Memory usage: " << initialMemory << '\n';
+			cout << "CPU consume : " << initialTime << '\n';
+			cout << "Success test\n";
+		}else{
+			throw invalid_argument("Can't open file: " + (string)argv[4]);
+		}
+	}else{
+		cout << "Invalid command. Read the docs.\n";
 	}
-	cout << 1e-6 * (getCpuCycles() - start) << '\n';
-	return 0;
 }

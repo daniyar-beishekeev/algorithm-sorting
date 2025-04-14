@@ -1,5 +1,6 @@
 #include <cstdlib>
 
+#pragma once
 class insertionSort{
 public:
 	template<typename T>

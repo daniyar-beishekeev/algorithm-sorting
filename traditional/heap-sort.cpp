@@ -1,5 +1,6 @@
 #include <cstdlib>
 
+#pragma once
 class heapSort{
 public:
 	template<typename T>

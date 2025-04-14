@@ -1,5 +1,6 @@
 #include <cstdlib>
 
+#pragma once
 class mergeSort{
 public:
 	//Merge sort, instead of copying values, swaps each 
