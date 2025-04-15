@@ -16,6 +16,7 @@ inline uint64_t getCpuCycles(){
 
 uint64_t NUM_COMPARISONS = 0;
 uint64_t NUM_SWAPS = 0;
+uint64_t MAX_STACK_POINTER = 0;
 
 struct BigMemoryInt{
 	int value;
@@ -29,22 +30,25 @@ struct BigMemoryInt{
 
 bool cmp(BigMemoryInt &a, BigMemoryInt &b){
 	NUM_COMPARISONS++;
+	MAX_STACK_POINTER = std::max(MAX_STACK_POINTER, getStackPointer());
 	return a.value < b.value;
 }
 
 void custom_swap(BigMemoryInt &a, BigMemoryInt &b){
 	NUM_SWAPS++;
+	MAX_STACK_POINTER = std::max(MAX_STACK_POINTER, getStackPointer());
 	//Boost, by swapping necessary only
 	std::swap(a.value, b.value);
 }
 
-
 bool cmp(int &a, int &b){
 	NUM_COMPARISONS++;
+	MAX_STACK_POINTER = std::max(MAX_STACK_POINTER, getStackPointer());
 	return a < b;
 }
 
 void custom_swap(int &a, int &b){
 	NUM_SWAPS++;
+	MAX_STACK_POINTER = std::max(MAX_STACK_POINTER, getStackPointer());
 	std::swap(a, b);
 }

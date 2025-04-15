@@ -1,6 +1,8 @@
-//From
+//getPeakRSS() -> From
 //https://stackoverflow.com/questions/669438/how-to-get-memory-usage-at-runtime-using-c
-//
+
+// getStackPointer -> From
+//https://stackoverflow.com/questions/20059673/print-out-value-of-stack-pointer
 
 /*
  * Author:  David Robert Nadeau
@@ -8,6 +10,11 @@
  * License: Creative Commons Attribution 3.0 Unported License
  *          http://creativecommons.org/licenses/by/3.0/deed.en_US
  */
+uint64_t getStackPointer(){
+    uint64_t sp;
+    asm("mov %%rsp, %0" : "=rm" ( sp ));
+    return sp;
+}
 
 #if defined(_WIN32)
 #include <windows.h>

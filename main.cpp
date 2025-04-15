@@ -1,8 +1,13 @@
 //Set sorting timeout to 5 seconds
-const long long int TIMEOUT = 5;
+#define TIMEOUT 5
+
+//Use it when tracking Stack Memory
+//This number is for waste calling of custom_swap or comparator
+#define CALIBRATED_MEMORY 176
 
 #include <bits/stdc++.h>
 #include <sys/wait.h>
+#include <sys/mman.h>
 
 #include "utils/metrics.cpp"
 #include "utils/gen.cpp"
@@ -40,13 +45,20 @@ const pair<string, void (*)(int*, int*, bool (&)(int&, int&), void (&)(int&, int
 	{"introSort", introSort::sort}
 };
 
+bool comp(int &a , int&b){
+	return a < b;
+}
 
 #define vi std::vector<int>
 
 void testSorting(vi &vec2, vi &answer, void (*sortPtr)(int*, int*, bool (&)(int&, int&), void (&)(int&, int&)), string algoName, string comment){
 	pid_t pid;
-	pid = fork();
+	long long int *TIMEOUT_LIMIT = (long long int*)mmap(NULL, sizeof(long long int), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	assert(TIMEOUT_LIMIT != MAP_FAILED);
+	*TIMEOUT_LIMIT = TIMEOUT;
+
 	//Sandbox sorting algorithm
+	pid = fork();
 	if(pid < 0){
 		assert(pid >= 0 && "Failed to fork");
 	}else if(pid == 0){//Child
@@ -60,10 +72,23 @@ void testSorting(vi &vec2, vi &answer, void (*sortPtr)(int*, int*, bool (&)(int&
 		auto initialMemory = getPeakRSS();
 		auto initialTime = getCpuCycles();
 
-		sortPtr(arr, arr + n, cmp, custom_swap);
+		sortPtr(arr, arr + n, comp, swap);
 
 		initialTime = getCpuCycles() - initialTime;
 		initialMemory = getPeakRSS() - initialMemory;
+
+		//Meaning no time limit
+		*TIMEOUT_LIMIT *= 4;
+		//Increate total time limit to rerun sorting with metrics
+
+		toSort = vec2;
+		arr = toSort.data();
+		long long int maxStackAddress = getStackPointer();
+		//Run sorting with numerical metrics, not resource
+		sortPtr(arr, arr + n, cmp, custom_swap);
+		maxStackAddress -= MAX_STACK_POINTER;
+
+		maxStackAddress -= CALIBRATED_MEMORY;
 
 		assert(toSort == answer && "Wrong answer, array is not sorted");
 
@@ -74,12 +99,13 @@ void testSorting(vi &vec2, vi &answer, void (*sortPtr)(int*, int*, bool (&)(int&
 		cout << "CPU consume : " << (double)initialTime * 1e-6 << '\n';
 		cout << "Swaps count : " << NUM_SWAPS << '\n';
 		cout << "Comparions  : " << NUM_COMPARISONS << '\n';
+		cout << "Stack memory: " << maxStackAddress << '\n';
 		cout << '\n';
 		exit(0);
 	}else{//Parent
 		int status;
 		pid_t result = waitpid(pid, &status, WNOHANG);
-		for (int i = 0; i < TIMEOUT * 1000 && result == 0; i++){
+		for (int i = 0; i < *TIMEOUT_LIMIT * 1000 && result == 0; i++){
 			usleep(1000);
 			result = waitpid(pid, &status, WNOHANG);
 		}
