@@ -100,6 +100,12 @@ Use python3 txt2csvReport.py
 To convert report.txt file to report.csv (Good for analysis)
 ```
 
+## Disclaimer
+report.txt/csv contains stats with Stack Memory, but with several tests only
+
+report10run.txt/csv does not contains Stack Memory metric, but have full stats without it
+report10run.txt/csv -> Is output from ./runTests.sh, but without Stack Memory metrics
+
 ## Example
 
 ```bash
