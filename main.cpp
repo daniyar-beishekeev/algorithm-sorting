@@ -43,13 +43,16 @@ const pair<string, void (*)(int*, int*, bool (&)(int&, int&), void (&)(int&, int
 
 #define vi std::vector<int>
 
-void testSorting(vi &toSort, vi &answer, void (*sortPtr)(int*, int*, bool (&)(int&, int&), void (&)(int&, int&)), string algoName, string comment){
+void testSorting(vi &vec2, vi &answer, void (*sortPtr)(int*, int*, bool (&)(int&, int&), void (&)(int&, int&)), string algoName, string comment){
 	pid_t pid;
 	pid = fork();
 	//Sandbox sorting algorithm
 	if(pid < 0){
 		assert(pid >= 0 && "Failed to fork");
 	}else if(pid == 0){//Child
+		//Copy on write mechanism
+		//Copy manually to not affect memory usage
+		auto toSort = vec2;
 		int n = toSort.size();
 		int *arr = toSort.data();
 //		cout << "Should be same (cur, peak): " << getCurrentRSS() << ' ' << getPeakRSS() << '\n';
@@ -161,10 +164,8 @@ int main(int argc, char* argv[]){
 			}
 
 			for(int i = 0; i < sorts; i++){
-				//Not necessary, CHeck required to remove
-				vi vec2 = vec;
 				if(limiter.find(SORTERS[i].first) != string::npos)
-					testSorting(vec2, ans, SORTERS[i].second, SORTERS[i].first, comment);
+					testSorting(vec, ans, SORTERS[i].second, SORTERS[i].first, comment);
 			}
 
 		}else{
