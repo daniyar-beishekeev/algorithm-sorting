@@ -116,10 +116,6 @@ void testSorting(vi &vec2, vi &answer, void (*sortPtr)(int*, int*, bool (&)(int&
 			cout << "Comment     : " << comment << '\n';
 			cout << "Result      : " << "Timeout" << '\n';
 			cout << "Algorithm   : " << algoName << '\n';
-			cout << "Memory usage: " << 0 << '\n';
-			cout << "CPU consume : " << 0 << '\n';
-			cout << "Swaps count : " << 0 << '\n';
-			cout << "Comparions  : " << 0 << '\n';
 			cout << '\n';
 		}
 	}
