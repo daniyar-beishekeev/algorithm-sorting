@@ -73,6 +73,7 @@ Memory usage: -> in Bytes (B)
 CPU consume : -> in Milliseconds (ms)
 Swaps count : -> Number of swaps
 Comparions  : -> Number of comparisons used
+Stack memory: -> Call stack size in Bytes (B)
 
 Shell scripts:
 
@@ -106,8 +107,11 @@ report.txt/csv contains stats with Stack Memory, but with several tests only
 report10run.txt/csv does not contains Stack Memory metric, but have full stats without it
 report10run.txt/csv -> Is output from ./runTests.sh, but without Stack Memory metrics
 
+
+
 ## Example
 
+**Stack memory feature output is available in -> report.txt
 ```bash
 ./main test tests/level5_n1000000_genPermutationSorted_v1.in CustomComment
 ```
